@@ -42,8 +42,8 @@ export const RecordForm: FC<RecordFormProps> = ({
     const record = {
       firstName: "",
       lastName: "",
-      phone: "",
-      age: "",
+      phoneNumber: "",
+      age: 0,
       address: "",
       foodDelivered: false,
       email: "",
