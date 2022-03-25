@@ -31,10 +31,13 @@ const Flex = styled.div`
 `;
 
 const Input = styled.input`
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 `;
 
 const Label = styled.label`
+  color: #000;
+  font-size: 14px;
+  font-weight: 500;
   margin: 0;
 `;

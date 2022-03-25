@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
 
 import { NewRecord } from "../../types/NewRecord";
 import { Input } from "../Input";
@@ -14,12 +13,14 @@ interface RecordFormProps {
   edit?: boolean;
   onSubmit(record: NewRecord): void;
   onFinish?: () => void;
+  title: string;
 }
 
 export const RecordForm: FC<RecordFormProps> = ({
   edit,
   onSubmit,
   onFinish,
+  title,
 }) => {
   const [editMode] = useState(edit || false);
   const [firstName, setFirstName] = useState("");
@@ -67,8 +68,9 @@ export const RecordForm: FC<RecordFormProps> = ({
 
   return (
     <Form onSubmit={submit}>
+      <Title>{title}</Title>
       <section className="mb-3">
-        <Heading>Personal</Heading>
+        <Subtitle>Personal</Subtitle>
         <Row>
           <Col xs={6} className="mb-2">
             <Input
@@ -88,7 +90,7 @@ export const RecordForm: FC<RecordFormProps> = ({
               onChange={e => setLastName(e.target.value)}
             />
           </Col>
-          <Col xs={6} className="mb-2">
+          <Col xs={3} className="mb-2">
             <Input
               id="age"
               label="Age"
@@ -97,7 +99,7 @@ export const RecordForm: FC<RecordFormProps> = ({
               onChange={e => setAge(e.target.value)}
             />
           </Col>
-          <Col xs={12}>
+          <Col xs={9}>
             <Input
               id="address"
               label="Address (optional)"
@@ -109,7 +111,7 @@ export const RecordForm: FC<RecordFormProps> = ({
         </Row>
       </section>
       <section className="mb-3">
-        <Heading>Contact</Heading>
+        <Subtitle>Contact</Subtitle>
         <Row>
           <Col xs={6}>
             <Input
@@ -127,12 +129,13 @@ export const RecordForm: FC<RecordFormProps> = ({
               type="text"
               value={phoneNumber}
               onChange={e => setPhoneNumber(e.target.value)}
+              pattern="[0-9]{10-11}"
             />
           </Col>
         </Row>
       </section>
       <section className="mb-4">
-        <Heading>Restaurant</Heading>
+        <Subtitle>Restaurant</Subtitle>
         <Row>
           <Col x={12} className="mb-2">
             <Checkbox
@@ -153,12 +156,12 @@ export const RecordForm: FC<RecordFormProps> = ({
         </Row>
       </section>
       <Actions>
-        <Button variant="outline-secondary" type="button" onClick={finish}>
+        <ButtonSecundary type="button" onClick={finish}>
           {!editMode ? "Finish" : "Cancel"}
-        </Button>
-        <Button variant="success" type="submit" onClick={submit}>
+        </ButtonSecundary>
+        <ButtonPrimary type="submit" onClick={submit}>
           {!editMode ? "Add" : "Save changes"}
-        </Button>
+        </ButtonPrimary>
       </Actions>
     </Form>
   );
@@ -166,17 +169,49 @@ export const RecordForm: FC<RecordFormProps> = ({
 
 const Form = styled.form`
   width: 90%;
-  max-width: 550px;
+  max-width: 600px;
+  padding: 2rem;
+  border: 1px solid #d0d0d0;
+  background-color: #fff;
+  border-radius: 0.5rem;
 `;
 
-const Heading = styled.h5`
+const Title = styled.h1`
+  font-weight: 700;
+  color: #003366;
+  margin-bottom: 1rem;
+`;
+
+const Subtitle = styled.h5`
   font-size: 1.25rem;
   margin-bottom: 0.75rem;
-  color: #003366;
+  color: #888888;
 `;
 
 const Actions = styled.section`
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
+  gap: 0.5rem;
+`;
+
+const ButtonPrimary = styled.button`
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: #003366;
+  padding: 0.5rem 2rem;
+  border-radius: 0.5rem;
+  border: none;
+`;
+
+const ButtonSecundary = styled.button`
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #003366;
+  background-color: transparent;
+  padding: 0.5rem 2rem;
+  border-radius: 0.5rem;
+  border: none;
 `;

@@ -15,8 +15,12 @@ export const EditRecordForm: FC = () => {
 
   return (
     <Fragment>
-      <h1>Edit Record</h1>
-      <RecordForm edit onSubmit={updateRecord} onFinish={goToHome} />
+      <RecordForm
+        edit
+        onSubmit={updateRecord}
+        onFinish={goToHome}
+        title={"Edit record"}
+      />
     </Fragment>
   );
 };
