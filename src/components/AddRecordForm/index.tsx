@@ -15,7 +15,7 @@ export const AddRecordForm: FC = () => {
 
   return (
     <Fragment>
-      <h1>Add Record</h1>
+      <h1>New Record</h1>
       <RecordForm onSubmit={sendNewRecord} onFinish={goToHome} />
     </Fragment>
   );
