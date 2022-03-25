@@ -1,7 +1,9 @@
 import { FC } from "react";
 
+import { EditRecordForm } from "../../components/EditRecordForm";
+
 const EditRecordPage: FC = () => {
-  return <p>Edit records works!</p>;
+  return <EditRecordForm />;
 };
 
 export default EditRecordPage;
