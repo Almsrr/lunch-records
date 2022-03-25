@@ -67,85 +67,91 @@ export const RecordForm: FC<RecordFormProps> = ({
 
   return (
     <Form onSubmit={submit}>
-      <Heading>Personal</Heading>
-      <Row className="mb-3">
-        <Col xs={6} className="mb-2">
-          <Input
-            id="first-name"
-            label="First Name"
-            type="text"
-            value={firstName}
-            onChange={e => setFirstName(e.target.value)}
-          />
-        </Col>
-        <Col xs={6} className="mb-2">
-          <Input
-            id="last-name"
-            label="Last Name"
-            type="text"
-            value={lastName}
-            onChange={e => setLastName(e.target.value)}
-          />
-        </Col>
-        <Col xs={6} className="mb-2">
-          <Input
-            id="age"
-            label="Age"
-            type="number"
-            value={age}
-            onChange={e => setAge(e.target.value)}
-          />
-        </Col>
-        <Col xs={12}>
-          <Input
-            id="address"
-            label="Address (optional)"
-            type="text"
-            value={address}
-            onChange={e => setAddress(e.target.value)}
-          />
-        </Col>
-      </Row>
-      <Heading>Contact</Heading>
-      <Row className="mb-3">
-        <Col xs={6}>
-          <Input
-            id="email"
-            label="Email"
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />
-        </Col>
-        <Col xs={6}>
-          <Input
-            id="phone-number"
-            label="Phone Number (optional)"
-            type="text"
-            value={phoneNumber}
-            onChange={e => setPhoneNumber(e.target.value)}
-          />
-        </Col>
-      </Row>
-      <Heading>Restaurant</Heading>
-      <Row className="mb-3">
-        <Col x={12} className="mb-2">
-          <Checkbox
-            id="food-delivered"
-            label="Food Delivered"
-            onChange={isChecked => setFoodDelivered(isChecked)}
-          />
-        </Col>
-        <Col xs={12}>
-          <Textarea
-            id="comment"
-            label="Comment (optional)"
-            value={comment}
-            onChange={e => setComment(e.target.value)}
-            rows={6}
-          />
-        </Col>
-      </Row>
+      <section className="mb-3">
+        <Heading>Personal</Heading>
+        <Row>
+          <Col xs={6} className="mb-2">
+            <Input
+              id="first-name"
+              label="First Name"
+              type="text"
+              value={firstName}
+              onChange={e => setFirstName(e.target.value)}
+            />
+          </Col>
+          <Col xs={6} className="mb-2">
+            <Input
+              id="last-name"
+              label="Last Name"
+              type="text"
+              value={lastName}
+              onChange={e => setLastName(e.target.value)}
+            />
+          </Col>
+          <Col xs={6} className="mb-2">
+            <Input
+              id="age"
+              label="Age"
+              type="number"
+              value={age}
+              onChange={e => setAge(e.target.value)}
+            />
+          </Col>
+          <Col xs={12}>
+            <Input
+              id="address"
+              label="Address (optional)"
+              type="text"
+              value={address}
+              onChange={e => setAddress(e.target.value)}
+            />
+          </Col>
+        </Row>
+      </section>
+      <section className="mb-3">
+        <Heading>Contact</Heading>
+        <Row>
+          <Col xs={6}>
+            <Input
+              id="email"
+              label="Email"
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+            />
+          </Col>
+          <Col xs={6}>
+            <Input
+              id="phone-number"
+              label="Phone Number (optional)"
+              type="text"
+              value={phoneNumber}
+              onChange={e => setPhoneNumber(e.target.value)}
+            />
+          </Col>
+        </Row>
+      </section>
+      <section className="mb-4">
+        <Heading>Restaurant</Heading>
+        <Row>
+          <Col x={12} className="mb-2">
+            <Checkbox
+              id="food-delivered"
+              label="Food Delivered"
+              onChange={isChecked => setFoodDelivered(isChecked)}
+            />
+          </Col>
+          <Col xs={12}>
+            <Textarea
+              id="comment"
+              label="Comment (optional)"
+              value={comment}
+              onChange={e => setComment(e.target.value)}
+              rows={6}
+            />
+          </Col>
+        </Row>
+      </section>
       <Actions>
         <Button variant="outline-secondary" type="button" onClick={finish}>
           {!editMode ? "Finish" : "Cancel"}
@@ -166,6 +172,7 @@ const Form = styled.form`
 const Heading = styled.h5`
   font-size: 1.25rem;
   margin-bottom: 0.75rem;
+  color: #003366;
 `;
 
 const Actions = styled.section`
