@@ -13,7 +13,6 @@ interface ModalProps {
 
 export const Modal: FC<ModalProps> = ({ message, error, onClose, loading }) => {
   const root = document.getElementById("modal-root")!;
-  console.log(loading);
 
   if (loading) {
     const modal = (

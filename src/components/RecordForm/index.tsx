@@ -8,61 +8,107 @@ import { NewRecord } from "../../types/NewRecord";
 import { Input } from "../Input";
 import { Textarea } from "../Textarea";
 import { Checkbox } from "../Checkbox";
+import { useInput } from "../../hooks/useInput";
+import { ModalConfig } from "../../types/ModalConfig";
 
 interface RecordFormProps {
   edit?: boolean;
   onSubmit(record: NewRecord): void;
-  onFinish?: () => void;
+  onFinish: () => void;
   title: string;
+  onModal: (config: ModalConfig) => void;
 }
+
+const isEmpty = (str: string) => str.trim() === "";
+const ageOutOfRange = (age: string) => Number(age) <= 0;
 
 export const RecordForm: FC<RecordFormProps> = ({
   edit,
   onSubmit,
   onFinish,
   title,
+  onModal,
 }) => {
   const [editMode] = useState(edit || false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [age, setAge] = useState("");
+
+  const [
+    firstName,
+    invalidFirstName,
+    changeFirstName,
+    blurFirstName,
+    resetFirstName,
+  ] = useInput(isEmpty);
+  const [
+    lastName,
+    invalidLastName,
+    changeLastName,
+    blurLastName,
+    resetLastName,
+  ] = useInput(isEmpty);
+  const [age, invalidAge, changeAge, blurAge, resetAge] =
+    useInput(ageOutOfRange);
+  const [email, invalidEmail, changeEmail, blurEmail, resetEmail] =
+    useInput(isEmpty);
   const [address, setAddress] = useState("");
-  const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [foodDelivered, setFoodDelivered] = useState(false);
   const [comment, setComment] = useState("");
 
+  const invalidForm =
+    invalidFirstName || invalidLastName || invalidAge || invalidEmail;
+
   const submit = (event: FormEvent) => {
     event.preventDefault();
 
-    //validate data
+    const emptyRequiredFields = !firstName || !lastName || !age || !email;
 
-    //isEmpty
-    //Regex for phoneNumber
+    if (emptyRequiredFields) {
+      const message = <p>Required fields are empty</p>;
+      onModal({ show: true, error: true, loading: false, message });
+
+      blurFirstName();
+      blurLastName();
+      blurAge();
+      blurEmail();
+      return;
+    }
 
     const record = {
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-      age: 0,
-      address: "",
-      foodDelivered: false,
-      email: "",
-      comment: "",
+      firstName,
+      lastName,
+      phoneNumber,
+      age,
+      address,
+      foodDelivered,
+      email,
+      comment,
     };
     onSubmit(record);
 
-    //clean inputs
-    setFirstName("");
+    //clean fields
+    resetFirstName();
+    resetLastName();
+    resetAge();
+    setAddress("");
+    resetEmail();
+    setPhoneNumber("");
+    setFoodDelivered(false);
+    setComment("");
   };
 
   const finish = () => {
-    //if there is data in form
-    const confirmed = window.confirm(
-      "Are you sure do you want leave this page? All the data will be lost"
-    );
-    if (confirmed) {
-      onFinish!();
+    //if user try to leave the page with data in the form
+    const dataInFields =
+      firstName || lastName || age || address || email || phoneNumber;
+    if (dataInFields) {
+      const confirmed = window.confirm(
+        "Are you sure do you want leave this page? All the data will be lost"
+      );
+      if (confirmed) {
+        onFinish!();
+      }
+    } else {
+      onFinish();
     }
   };
 
@@ -78,7 +124,10 @@ export const RecordForm: FC<RecordFormProps> = ({
               label="First Name"
               type="text"
               value={firstName}
-              onChange={e => setFirstName(e.target.value)}
+              onChange={changeFirstName}
+              invalid={invalidFirstName}
+              errorMessage="Required field"
+              onBlur={blurFirstName}
             />
           </Col>
           <Col xs={6} className="mb-2">
@@ -87,7 +136,10 @@ export const RecordForm: FC<RecordFormProps> = ({
               label="Last Name"
               type="text"
               value={lastName}
-              onChange={e => setLastName(e.target.value)}
+              onChange={changeLastName}
+              invalid={invalidLastName}
+              errorMessage="Required field"
+              onBlur={blurLastName}
             />
           </Col>
           <Col xs={3} className="mb-2">
@@ -96,7 +148,10 @@ export const RecordForm: FC<RecordFormProps> = ({
               label="Age"
               type="number"
               value={age}
-              onChange={e => setAge(e.target.value)}
+              onChange={changeAge}
+              invalid={invalidAge}
+              errorMessage="Invalid age"
+              onBlur={blurAge}
             />
           </Col>
           <Col xs={9}>
@@ -119,7 +174,10 @@ export const RecordForm: FC<RecordFormProps> = ({
               label="Email"
               type="email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={changeEmail}
+              invalid={invalidEmail}
+              errorMessage="Required field"
+              onBlur={blurEmail}
             />
           </Col>
           <Col xs={6}>
@@ -129,7 +187,6 @@ export const RecordForm: FC<RecordFormProps> = ({
               type="text"
               value={phoneNumber}
               onChange={e => setPhoneNumber(e.target.value)}
-              pattern="[0-9]{10-11}"
             />
           </Col>
         </Row>
@@ -159,7 +216,7 @@ export const RecordForm: FC<RecordFormProps> = ({
         <ButtonSecundary type="button" onClick={finish}>
           {!editMode ? "Finish" : "Cancel"}
         </ButtonSecundary>
-        <ButtonPrimary type="submit" onClick={submit}>
+        <ButtonPrimary type="submit" onClick={submit} disabled={invalidForm}>
           {!editMode ? "Add" : "Save changes"}
         </ButtonPrimary>
       </Actions>
@@ -194,15 +251,16 @@ const Actions = styled.section`
   gap: 0.5rem;
 `;
 
-const ButtonPrimary = styled.button`
+const ButtonPrimary = styled.button<{ disabled?: boolean }>`
   display: inline-block;
   font-size: 1rem;
   font-weight: 700;
   color: #fff;
-  background-color: #003366;
+  background-color: ${props => (props.disabled ? "#c0c0c0" : "#003366")};
   padding: 0.5rem 2rem;
   border-radius: 0.5rem;
   border: none;
+  cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
 `;
 
 const ButtonSecundary = styled.button`

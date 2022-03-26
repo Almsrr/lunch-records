@@ -8,12 +8,12 @@ interface InputProps {
   value: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
-  pattern?: string;
   errorMessage?: string;
+  invalid?: boolean;
 }
 
 export const Input: FC<InputProps> = props => {
-  const { label, id, type, value, onChange, onBlur, pattern, errorMessage } =
+  const { label, id, type, value, onChange, onBlur, errorMessage, invalid } =
     props;
 
   return (
@@ -24,7 +24,7 @@ export const Input: FC<InputProps> = props => {
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        pattern={pattern}
+        invalid={invalid}
       />
       <ErrorMessage>{errorMessage || "Invalid input"}</ErrorMessage>
     </Fragment>
@@ -38,16 +38,22 @@ const Label = styled.label`
   font-weight: 500;
 `;
 
-const Control = styled.input`
+const Control = styled.input<{ invalid?: boolean }>`
   display: block;
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #d0d0d0;
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${props => (props.invalid ? " #ce2029" : "#d0d0d0")};
   border-radius: 0.25rem;
 
   &:focus {
     outline: none;
     border-color: #000;
+  }
+
+  & ~ p {
+    display: ${props => (props.invalid ? "block" : "none")};
   }
 `;
 
