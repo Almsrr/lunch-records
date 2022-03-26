@@ -10,6 +10,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 3rem 0;
-  min-height: 100vh;
+  height: 100vh;
   background-color: #f5f5f5;
+  overflow-y: scroll;
 `;
