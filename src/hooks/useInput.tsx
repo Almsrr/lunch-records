@@ -1,28 +1,24 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useCallback } from "react";
 
-import { Hook } from "../types/Hook";
-
-type validationFunction = (value: string) => boolean;
-
-export const useInput: Hook<validationFunction> = validationFunction => {
+export const useInput = (validationFunction: any) => {
   const [value, setValue] = useState("");
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   const invalidValue = validationFunction(value);
   const invalidInput = invalidValue && isConfirmed;
 
-  const changeInput = (e: ChangeEvent<HTMLInputElement>) => {
+  const changeInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
-  };
+  }, []);
 
-  const blurInput = (e: any) => {
+  const blurInput = useCallback((e: any) => {
     setIsConfirmed(true);
-  };
+  }, []);
 
-  const resetInput = () => {
+  const resetInput = useCallback(() => {
     setValue("");
     setIsConfirmed(false);
-  };
+  }, []);
 
-  return [value, invalidInput, changeInput, blurInput, resetInput];
+  return [value, invalidInput, changeInput, blurInput, resetInput, setValue];
 };

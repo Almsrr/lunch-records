@@ -1,4 +1,4 @@
-import { FC, useState, FormEvent } from "react";
+import { FC, useState, FormEvent, useEffect } from "react";
 import styled from "styled-components";
 
 import Row from "react-bootstrap/Row";
@@ -13,9 +13,10 @@ import { ModalConfig } from "../../types/ModalConfig";
 
 interface RecordFormProps {
   edit?: boolean;
+  title: string;
+  initials?: NewRecord;
   onSubmit(record: NewRecord): void;
   onFinish: () => void;
-  title: string;
   onModal: (config: ModalConfig) => void;
 }
 
@@ -28,6 +29,7 @@ export const RecordForm: FC<RecordFormProps> = ({
   onFinish,
   title,
   onModal,
+  initials,
 }) => {
   const [editMode] = useState(edit || false);
 
@@ -37,6 +39,7 @@ export const RecordForm: FC<RecordFormProps> = ({
     changeFirstName,
     blurFirstName,
     resetFirstName,
+    setFirstName,
   ] = useInput(isEmpty);
   const [
     lastName,
@@ -44,15 +47,41 @@ export const RecordForm: FC<RecordFormProps> = ({
     changeLastName,
     blurLastName,
     resetLastName,
+    setLastName,
   ] = useInput(isEmpty);
-  const [age, invalidAge, changeAge, blurAge, resetAge] =
+  const [age, invalidAge, changeAge, blurAge, resetAge, setAge] =
     useInput(ageOutOfRange);
-  const [email, invalidEmail, changeEmail, blurEmail, resetEmail] =
+  const [email, invalidEmail, changeEmail, blurEmail, resetEmail, setEmail] =
     useInput(isEmpty);
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [foodDelivered, setFoodDelivered] = useState(false);
   const [comment, setComment] = useState("");
+
+  useEffect(() => {
+    //initialize values
+    if (initials) {
+      const {
+        firstName,
+        lastName,
+        age,
+        address,
+        email,
+        phoneNumber,
+        comment,
+        foodDelivered,
+      } = initials;
+
+      setFirstName(firstName);
+      setLastName(lastName);
+      setAge(age.toString());
+      setAddress(address);
+      setEmail(email);
+      setPhoneNumber(phoneNumber);
+      setComment(comment);
+      setFoodDelivered(foodDelivered);
+    }
+  }, [initials, setFirstName, setLastName, setAge, setEmail]);
 
   const invalidForm =
     invalidFirstName || invalidLastName || invalidAge || invalidEmail;
@@ -199,6 +228,7 @@ export const RecordForm: FC<RecordFormProps> = ({
               id="food-delivered"
               label="Food Delivered"
               onChange={isChecked => setFoodDelivered(isChecked)}
+              value={foodDelivered}
             />
           </Col>
           <Col xs={12}>

@@ -4,10 +4,11 @@ import styled from "styled-components";
 interface CheckboxProps {
   label: string;
   id: string;
+  value: boolean;
   onChange: (isChecked: boolean) => void;
 }
 
-export const Checkbox: FC<CheckboxProps> = ({ id, label, onChange }) => {
+export const Checkbox: FC<CheckboxProps> = ({ id, label, onChange, value }) => {
   const inputHandler = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       onChange(true);
@@ -18,7 +19,7 @@ export const Checkbox: FC<CheckboxProps> = ({ id, label, onChange }) => {
 
   return (
     <Flex>
-      <Input type="checkbox" id={id} onChange={inputHandler} />
+      <Input type="checkbox" id={id} onChange={inputHandler} checked={value} />
       <Label>{label}</Label>
     </Flex>
   );

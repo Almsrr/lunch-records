@@ -7,13 +7,13 @@ import { Modal } from "../Modal";
 import { ModalConfig } from "../../types/ModalConfig";
 
 export const AddRecordForm: FC = () => {
+  const navigate = useNavigate();
   const [modal, setModal] = useState<ModalConfig>({
     show: false,
     error: false,
     message: <p></p>,
     loading: false,
   });
-  const navigate = useNavigate();
 
   const sendNewRecord = (newRecord: NewRecord) => {
     const message = <p className="m-0">Loading...</p>;
@@ -36,7 +36,12 @@ export const AddRecordForm: FC = () => {
   };
 
   const closeModal = () => {
-    setModal({ show: false, error: false, message: <p></p>, loading: false });
+    modalHandler({
+      show: false,
+      error: false,
+      message: <p></p>,
+      loading: false,
+    });
   };
 
   return (
