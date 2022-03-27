@@ -135,7 +135,7 @@ export const useLocalStorage = () => {
         return false;
       });
     },
-    []
+    [filterByEmail, filterByFullName]
   );
 
   return {
