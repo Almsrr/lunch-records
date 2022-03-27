@@ -69,7 +69,7 @@ export const useLocalStorage = () => {
   }, []);
 
   // FILTER
-  const filterBy = (field: string, value: string) => {
+  const filterBy = useCallback((field: string, value: string) => {
     const records = retrieveFromStorage();
 
     const validField = records.every(record => {
@@ -80,9 +80,9 @@ export const useLocalStorage = () => {
       return records.filter(record => (record as any)[field].includes(value));
     }
     return records;
-  };
+  }, []);
 
-  const filterByFullName = (value: string) => {
+  const filterByFullName = useCallback((value: string) => {
     const records = retrieveFromStorage();
 
     return records.filter(record => {
@@ -93,9 +93,9 @@ export const useLocalStorage = () => {
       }
       return false;
     });
-  };
+  }, []);
 
-  const filterByEmail = (value: string) => {
+  const filterByEmail = useCallback((value: string) => {
     const records = retrieveFromStorage();
 
     return records.filter(record => {
@@ -106,7 +106,7 @@ export const useLocalStorage = () => {
       }
       return false;
     });
-  };
+  }, []);
 
   return {
     addRecord,

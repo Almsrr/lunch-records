@@ -1,7 +1,7 @@
 import { FC, useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
 
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { Record } from "../../types/Record";
 import { GridHeader } from "./GridHeader";
 import { GridTable } from "./GridTable";
@@ -38,7 +38,7 @@ export const RecordsGrid: FC = () => {
     setSelectedRecordsIds(ids => ids.filter(id => id !== selectedRecordId));
   };
 
-  const updateRecordItem = (id: string, foodDelivered: boolean) => {
+  const updateRecordFood = (id: string, foodDelivered: boolean) => {
     updateFoodDelivered(id, foodDelivered);
     fetchRecords();
   };
@@ -48,15 +48,21 @@ export const RecordsGrid: FC = () => {
     fetchRecords();
   };
 
-  const filterFullName = (value: string) => {
-    const filteredRecords = filterByFullName(value);
-    setRecords(filteredRecords);
-  };
+  const filterFullName = useCallback(
+    (expr: string) => {
+      const filteredRecords = filterByFullName(expr);
+      setRecords(filteredRecords);
+    },
+    [setRecords, filterByFullName]
+  );
 
-  const filterEmail = (value: string) => {
-    const filteredRecords = filterByEmail(value);
-    setRecords(filteredRecords);
-  };
+  const filterEmail = useCallback(
+    (expr: string) => {
+      const filteredRecords = filterByEmail(expr);
+      setRecords(filteredRecords);
+    },
+    [setRecords, filterByEmail]
+  );
 
   return (
     <Container>
@@ -71,7 +77,7 @@ export const RecordsGrid: FC = () => {
       <GridTable
         recordsList={records}
         onSelectRecord={selectRecordItem}
-        onUpdateRecordFood={updateRecordItem}
+        onUpdateRecordFood={updateRecordFood}
       />
     </Container>
   );
