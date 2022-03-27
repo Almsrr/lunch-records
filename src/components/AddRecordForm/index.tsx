@@ -57,7 +57,13 @@ export const AddRecordForm: FC = () => {
         onModal={modalHandler}
       />
       {modal.show && (
-        <Modal type={modal.type} message={modal.message} onClose={closeModal} />
+        <Modal
+          type={modal.type}
+          message={modal.message}
+          onClose={closeModal}
+          onConfirm={goToHome}
+          onSuccess={goToHome}
+        />
       )}
     </Fragment>
   );

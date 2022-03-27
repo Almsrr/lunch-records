@@ -121,5 +121,4 @@ export const RecordsGrid: FC = () => {
 
 const Container = styled.div`
   width: 85%;
-  overflow-x: scroll;
 `;

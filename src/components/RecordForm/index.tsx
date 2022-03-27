@@ -129,18 +129,20 @@ export const RecordForm: FC<RecordFormProps> = ({
   };
 
   const finish = () => {
-    //if user try to leave the page with data in the form
-    const dataInFields =
-      firstName || lastName || age || address || email || phoneNumber;
-    if (dataInFields) {
-      const confirmed = window.confirm(
-        "Are you sure do you want leave this page? All the data will be lost"
-      );
-      if (confirmed) {
-        onFinish!();
+    //if there is data in fields
+    if (!edit) {
+      const dataInFields =
+        firstName || lastName || age || address || email || phoneNumber;
+      if (dataInFields) {
+        onModal({
+          show: true,
+          type: "warning",
+          message:
+            "Are you sure do you want leave this page? All the data will be lost",
+        });
+      } else {
+        onFinish();
       }
-    } else {
-      onFinish();
     }
   };
 
