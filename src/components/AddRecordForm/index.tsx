@@ -5,9 +5,11 @@ import { RecordForm } from "../RecordForm";
 import { NewRecord } from "../../types/NewRecord";
 import { Modal } from "../Modal";
 import { ModalConfig } from "../../types/ModalConfig";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 export const AddRecordForm: FC = () => {
   const navigate = useNavigate();
+  const { addRecord } = useLocalStorage();
   const [modal, setModal] = useState<ModalConfig>({
     show: false,
     error: false,
@@ -16,15 +18,20 @@ export const AddRecordForm: FC = () => {
   });
 
   const sendNewRecord = (newRecord: NewRecord) => {
-    const message = <p className="m-0">Loading...</p>;
-    modalHandler({ show: true, error: false, message, loading: true });
+    modalHandler({
+      show: true,
+      error: false,
+      loading: true,
+      message: <p className="m-0">Loading...</p>,
+    });
 
-    setTimeout(() => {
-      const message = <p className="m-0">Record added successfully</p>;
-      modalHandler({ show: true, error: false, message });
-      // const message = <p className="m-0">Something went wrong</p>;
-      // setModal({ show: true, error: true, message });
-    }, 2000);
+    addRecord(newRecord);
+
+    modalHandler({
+      show: true,
+      error: false,
+      message: <p className="m-0">Record added successfully</p>,
+    });
   };
 
   const modalHandler = (config: ModalConfig) => {
