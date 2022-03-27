@@ -9,6 +9,7 @@ interface ModalProps {
   message: string;
   onClose: () => void;
   onConfirm?: () => void;
+  onSuccess?: () => void;
 }
 
 export const Modal: FC<ModalProps> = ({
@@ -16,6 +17,7 @@ export const Modal: FC<ModalProps> = ({
   message,
   onClose,
   onConfirm,
+  onSuccess,
 }) => {
   const root = document.getElementById("modal-root")!;
 
@@ -26,7 +28,7 @@ export const Modal: FC<ModalProps> = ({
           <Blur onClick={onClose}></Blur>
           <SpinnerCont>
             <Spinner />
-            {message}
+            <Text>{message}</Text>
           </SpinnerCont>
         </Fragment>
       );
@@ -37,9 +39,12 @@ export const Modal: FC<ModalProps> = ({
           <Blur onClick={onClose}></Blur>
           <Container>
             <Img src="/images/warning.png" alt="warning" />
-            {message}
-            <Button type="button" onClick={onClose}>
+            <Text>{message}</Text>
+            <Button type="button" onClick={onConfirm}>
               Ok
+            </Button>
+            <Button type="button" onClick={onClose}>
+              Cancel
             </Button>
           </Container>
         </Fragment>
@@ -51,7 +56,7 @@ export const Modal: FC<ModalProps> = ({
           <Blur onClick={onClose}></Blur>
           <Container>
             <Img src="/images/error.webp" alt="error" />
-            {message}
+            <Text>{message}</Text>
             <Button type="button" onClick={onClose}>
               Ok
             </Button>
@@ -65,8 +70,8 @@ export const Modal: FC<ModalProps> = ({
           <Blur onClick={onClose}></Blur>
           <Container>
             <Img src="/images/success.png" alt="success" />
-            {message}
-            <Button type="button" onClick={onConfirm || onClose}>
+            <Text>{message}</Text>
+            <Button type="button" onClick={onSuccess || onClose}>
               Ok
             </Button>
           </Container>
@@ -112,7 +117,7 @@ const Button = styled.button`
   border: none;
   border-radius: 0.5rem;
   color: #000;
-  background-color: #f5f5f5;
+  background-color: #d3d3d3;
   font-weight: 700;
   margin-top: 1rem;
   width: 80%;
@@ -136,4 +141,8 @@ const SpinnerCont = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
+`;
+
+const Text = styled.p`
+  text-align: center;
 `;

@@ -6,10 +6,17 @@ import { Record } from "../../types/Record";
 import { GridHeader } from "./GridHeader";
 import { GridTable } from "./GridTable";
 import { GridFilters } from "./GridFilters";
+import { Modal } from "../Modal";
+import { ModalOptions } from "../../types/ModalOptions";
 
 export const RecordsGrid: FC = () => {
   const [records, setRecords] = useState<Record[]>([]);
   const [selectedRecordsIds, setSelectedRecordsIds] = useState<string[]>([]);
+  const [modal, setModal] = useState<ModalOptions>({
+    show: false,
+    type: "",
+    message: "",
+  });
   const {
     getRecords,
     deleteRecords,
@@ -43,9 +50,33 @@ export const RecordsGrid: FC = () => {
     fetchRecords();
   };
 
+  const confirmDeletion = () => {
+    setModal({
+      show: true,
+      type: "warning",
+      message: "Are you sure do you want to delete this records?",
+    });
+  };
+
+  const closeModal = () => {
+    setModal({
+      show: false,
+      message: "",
+      type: "",
+    });
+  };
+
   const deleteSelectedRecords = () => {
+    setModal({ show: true, type: "loading", message: "Loading..." });
+
     deleteRecords(selectedRecordsIds);
     fetchRecords();
+
+    setModal({
+      show: true,
+      type: "success",
+      message: "Records deleted successfully!",
+    });
   };
 
   const filterFullName = useCallback(
@@ -70,15 +101,20 @@ export const RecordsGrid: FC = () => {
         onFilterFullName={filterFullName}
         onFilterEmail={filterEmail}
       />
-      <GridHeader
-        recordsIds={selectedRecordsIds}
-        onDelete={deleteSelectedRecords}
-      />
+      <GridHeader recordsIds={selectedRecordsIds} onDelete={confirmDeletion} />
       <GridTable
         recordsList={records}
         onSelectRecord={selectRecordItem}
         onUpdateRecordFood={updateRecordFood}
       />
+      {modal.show && (
+        <Modal
+          type={modal.type}
+          message={modal.message}
+          onClose={closeModal}
+          onConfirm={deleteSelectedRecords}
+        />
+      )}
     </Container>
   );
 };
