@@ -108,6 +108,52 @@ export const useLocalStorage = () => {
     });
   }, []);
 
+  const filterByNameAndEmail = useCallback(
+    (fullNameExpr: string, emailExpr: string) => {
+      const records = retrieveFromStorage();
+
+      // For email
+      if (!fullNameExpr.trim()) {
+        return records.filter(record => {
+          const email = record.email.toLowerCase();
+          const emailTerm = emailExpr.toLowerCase();
+
+          if (email.includes(emailTerm)) {
+            return true;
+          }
+          return false;
+        });
+      }
+
+      //For name
+      if (!emailExpr.trim()) {
+        return records.filter(record => {
+          const fullName = (record.firstName + record.lastName).toLowerCase();
+          const fullNameTerm = fullNameExpr.toLowerCase();
+
+          if (fullName.includes(fullNameTerm)) {
+            return true;
+          }
+          return false;
+        });
+      }
+
+      //Both
+      return records.filter(record => {
+        const fullName = (record.firstName + record.lastName).toLowerCase();
+        const email = record.email.toLowerCase();
+        const fullNameTerm = fullNameExpr.toLowerCase();
+        const emailTerm = emailExpr.toLowerCase();
+
+        if (fullName.includes(fullNameTerm) && email.includes(emailTerm)) {
+          return true;
+        }
+        return false;
+      });
+    },
+    []
+  );
+
   return {
     addRecord,
     updateRecord,
@@ -118,5 +164,6 @@ export const useLocalStorage = () => {
     filterBy,
     filterByFullName,
     filterByEmail,
+    filterByNameAndEmail,
   };
 };

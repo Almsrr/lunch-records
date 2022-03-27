@@ -21,8 +21,7 @@ export const RecordsGrid: FC = () => {
     getRecords,
     deleteRecords,
     updateFoodDelivered,
-    filterByFullName,
-    filterByEmail,
+    filterByNameAndEmail,
   } = useLocalStorage();
 
   const fetchRecords = useCallback(() => {
@@ -83,28 +82,29 @@ export const RecordsGrid: FC = () => {
     });
   };
 
-  const filterFullName = useCallback(
-    (expr: string) => {
-      const filteredRecords = filterByFullName(expr);
-      setRecords(filteredRecords);
-    },
-    [setRecords, filterByFullName]
-  );
+  const filterNameAndEmail = useCallback(
+    (nameExpr: string, emailExpr: string) => {
+      setModal({
+        show: true,
+        type: "loading",
+        message: "Filtering...",
+      });
 
-  const filterEmail = useCallback(
-    (expr: string) => {
-      const filteredRecords = filterByEmail(expr);
+      const filteredRecords = filterByNameAndEmail(nameExpr, emailExpr);
+      console.log(filteredRecords);
       setRecords(filteredRecords);
+      setModal({
+        show: false,
+        type: "",
+        message: "",
+      });
     },
-    [setRecords, filterByEmail]
+    [setRecords, filterByNameAndEmail]
   );
 
   return (
     <Container>
-      <GridFilters
-        onFilterFullName={filterFullName}
-        onFilterEmail={filterEmail}
-      />
+      <GridFilters onFilter={filterNameAndEmail} />
       <GridHeader recordsIds={selectedRecordsIds} onDelete={confirmDeletion} />
       <GridTable
         recordsList={records}
