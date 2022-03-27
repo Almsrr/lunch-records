@@ -1,13 +1,16 @@
 import { FC, Fragment, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { RecordForm } from "../RecordForm";
 import { NewRecord } from "../../types/NewRecord";
 import { Modal } from "react-bootstrap";
 import { ModalConfig } from "../../types/ModalConfig";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 export const EditRecordForm: FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { getRecord, updateRecord } = useLocalStorage();
   const [initials, setInitials] = useState<NewRecord>();
   const [modal, setModal] = useState<ModalConfig>({
     show: false,
@@ -17,19 +20,17 @@ export const EditRecordForm: FC = () => {
   });
 
   useEffect(() => {
-    setInitials({
-      firstName: "Alam",
-      lastName: "Sierra",
-      age: 89,
-      address: "Lotes",
-      email: "alam@domain.com",
-      phoneNumber: "1233333",
-      foodDelivered: true,
-      comment: "come mucho",
-    });
-  }, []);
-  const updateRecord = (record: NewRecord) => {
-    console.log(record);
+    const recordId = searchParams.get("id");
+    const record = getRecord(recordId!);
+    if (record) {
+      setInitials(record);
+    }
+  }, [searchParams, getRecord]);
+
+  const modifyRecord = (record: NewRecord) => {
+    const recordId = searchParams.get("id");
+    updateRecord(recordId!, record);
+    goToHome();
   };
 
   const goToHome = () => {
@@ -53,7 +54,7 @@ export const EditRecordForm: FC = () => {
     <Fragment>
       <RecordForm
         edit
-        onSubmit={updateRecord}
+        onSubmit={modifyRecord}
         onFinish={goToHome}
         title={"Edit record"}
         initials={initials}

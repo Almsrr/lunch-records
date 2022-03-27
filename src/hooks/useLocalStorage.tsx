@@ -1,10 +1,11 @@
+import { useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { NewRecord } from "../types/NewRecord";
 import { Record } from "../types/Record";
 
 export const useLocalStorage = () => {
-  const addRecord = (record: NewRecord) => {
+  const addRecord = useCallback((record: NewRecord) => {
     const newRecord = { id: uuidv4(), ...record };
     const records: Record[] = JSON.parse(localStorage.getItem("records")!);
 
@@ -15,9 +16,9 @@ export const useLocalStorage = () => {
     }
     const newRecords = JSON.stringify(Array(newRecord));
     localStorage.setItem("records", newRecords);
-  };
+  }, []);
 
-  const updateRecord = (id: string, record: NewRecord) => {
+  const updateRecord = useCallback((id: string, record: NewRecord) => {
     const records: Record[] = JSON.parse(localStorage.getItem("records")!);
 
     const index = records.findIndex(record => record.id === id);
@@ -25,10 +26,14 @@ export const useLocalStorage = () => {
 
     const updatedRecords = JSON.stringify(records);
     localStorage.setItem("records", updatedRecords);
-  };
-  const getRecords = () => {};
-  const getRecord = () => {};
-  const deleteRecord = () => {};
+  }, []);
 
-  return { addRecord, updateRecord };
+  const getRecord = useCallback((id: string) => {
+    const records: Record[] = JSON.parse(localStorage.getItem("records")!);
+    return records.find(record => record.id === id);
+  }, []);
+  // const getRecords = () => {};
+  // const deleteRecord = () => {};
+
+  return { addRecord, updateRecord, getRecord };
 };
