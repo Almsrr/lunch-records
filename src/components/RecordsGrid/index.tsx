@@ -70,7 +70,11 @@ export const RecordsGrid: FC = () => {
     setModal({ show: true, type: "loading", message: "Loading..." });
 
     deleteRecords(selectedRecordsIds);
-    fetchRecords();
+    selectedRecordsIds.forEach(id => {
+      const index = records.findIndex(record => record.id === id);
+      records.splice(index, 1);
+    });
+    setSelectedRecordsIds([]);
 
     setModal({
       show: true,

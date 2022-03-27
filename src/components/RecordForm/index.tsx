@@ -129,8 +129,8 @@ export const RecordForm: FC<RecordFormProps> = ({
   };
 
   const finish = () => {
-    //if there is data in fields
     if (!edit) {
+      //if there is data in fields
       const dataInFields =
         firstName || lastName || age || address || email || phoneNumber;
       if (dataInFields) {
@@ -143,34 +143,37 @@ export const RecordForm: FC<RecordFormProps> = ({
       } else {
         onFinish();
       }
-    }
-    // if user changed input initials values
-    const firstWasChanged = firstName !== initials?.firstName;
-    const lastWasChanged = lastName !== initials?.lastName;
-    const ageWasChanged = age !== initials?.age;
-    const addressWasChanged = address !== initials?.address;
-    const phoneWasChanged = phoneNumber !== initials?.phoneNumber;
-    const foodDelWasChanged = foodDelivered !== initials?.foodDelivered;
-    const commentWasChanged = comment !== initials?.comment;
-
-    const fieldsChanged =
-      firstWasChanged ||
-      lastWasChanged ||
-      ageWasChanged ||
-      addressWasChanged ||
-      phoneWasChanged ||
-      foodDelWasChanged ||
-      commentWasChanged;
-
-    if (fieldsChanged) {
-      onModal({
-        show: true,
-        type: "warning",
-        message:
-          "Are you sure do you want leave this page? All your changes will be lost",
-      });
     } else {
-      onFinish();
+      // if user changed input initials values
+      const firstWasChanged = firstName !== initials?.firstName;
+      const lastWasChanged = lastName !== initials?.lastName;
+      const ageWasChanged = age !== initials?.age;
+      const addressWasChanged = address !== initials?.address;
+      const emailWasChanged = address !== initials?.email;
+      const phoneWasChanged = phoneNumber !== initials?.phoneNumber;
+      const foodDelWasChanged = foodDelivered !== initials?.foodDelivered;
+      const commentWasChanged = comment !== initials?.comment;
+
+      const fieldsChanged =
+        firstWasChanged ||
+        lastWasChanged ||
+        ageWasChanged ||
+        addressWasChanged ||
+        emailWasChanged ||
+        phoneWasChanged ||
+        foodDelWasChanged ||
+        commentWasChanged;
+
+      if (fieldsChanged) {
+        onModal({
+          show: true,
+          type: "warning",
+          message:
+            "Are you sure do you want leave this page? All your changes will be lost",
+        });
+      } else {
+        onFinish();
+      }
     }
   };
 
