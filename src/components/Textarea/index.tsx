@@ -6,11 +6,15 @@ interface TextareaProps {
   label: string;
   value: string;
   rows?: number;
-  onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange: (value: string) => void;
 }
 
 export const Textarea: FC<TextareaProps> = props => {
   const { id, label, value, rows, onChange } = props;
+
+  const changeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    onChange(event.target.value);
+  };
   return (
     <Fragment>
       <Label htmlFor={id}>{label}</Label>
@@ -18,7 +22,7 @@ export const Textarea: FC<TextareaProps> = props => {
         id={id}
         rows={rows || 8}
         value={value}
-        onChange={onChange}
+        onChange={changeHandler}
         placeholder="Write here..."
       ></Area>
     </Fragment>

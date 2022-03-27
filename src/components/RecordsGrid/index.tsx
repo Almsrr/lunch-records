@@ -91,7 +91,6 @@ export const RecordsGrid: FC = () => {
       });
 
       const filteredRecords = filterByNameAndEmail(nameExpr, emailExpr);
-      console.log(filteredRecords);
       setRecords(filteredRecords);
       setModal({
         show: false,

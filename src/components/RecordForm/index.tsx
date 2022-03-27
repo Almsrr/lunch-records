@@ -225,7 +225,7 @@ export const RecordForm: FC<RecordFormProps> = ({
               label="Address (optional)"
               type="text"
               value={address}
-              onChange={e => setAddress(e.target.value)}
+              onChange={value => setAddress(value)}
             />
           </Col>
         </Row>
@@ -251,7 +251,7 @@ export const RecordForm: FC<RecordFormProps> = ({
               label="Phone Number (optional)"
               type="text"
               value={phoneNumber}
-              onChange={e => setPhoneNumber(e.target.value)}
+              onChange={value => setPhoneNumber(value)}
             />
           </Col>
         </Row>
@@ -272,7 +272,7 @@ export const RecordForm: FC<RecordFormProps> = ({
               id="comment"
               label="Comment (optional)"
               value={comment}
-              onChange={e => setComment(e.target.value)}
+              onChange={value => setComment(value)}
               rows={6}
             />
           </Col>

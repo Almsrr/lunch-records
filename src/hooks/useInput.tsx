@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 
 export const useInput = (validationFunction: any) => {
   const [value, setValue] = useState("");
@@ -7,8 +7,8 @@ export const useInput = (validationFunction: any) => {
   const invalidValue = validationFunction(value);
   const invalidInput = invalidValue && isConfirmed;
 
-  const changeInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+  const changeInput = useCallback((value: string) => {
+    setValue(value);
   }, []);
 
   const blurInput = useCallback((e: any) => {

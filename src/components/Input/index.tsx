@@ -6,7 +6,7 @@ interface InputProps {
   id: string;
   type: string;
   value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (value: string) => void;
   onBlur?: () => void;
   errorMessage?: string;
   invalid?: boolean;
@@ -16,13 +16,17 @@ export const Input: FC<InputProps> = props => {
   const { label, id, type, value, onChange, onBlur, errorMessage, invalid } =
     props;
 
+  const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    onChange(event.target.value);
+  };
+
   return (
     <Fragment>
       <Label htmlFor={id}>{label}</Label>
       <Control
         type={type}
         value={value}
-        onChange={onChange}
+        onChange={changeHandler}
         onBlur={onBlur}
         invalid={invalid}
       />

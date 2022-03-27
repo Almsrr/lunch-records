@@ -112,33 +112,17 @@ export const useLocalStorage = () => {
     (fullNameExpr: string, emailExpr: string) => {
       const records = retrieveFromStorage();
 
-      // For email
+      // By email
       if (!fullNameExpr.trim()) {
-        return records.filter(record => {
-          const email = record.email.toLowerCase();
-          const emailTerm = emailExpr.toLowerCase();
-
-          if (email.includes(emailTerm)) {
-            return true;
-          }
-          return false;
-        });
+        return filterByEmail(emailExpr);
       }
 
-      //For name
+      //By names
       if (!emailExpr.trim()) {
-        return records.filter(record => {
-          const fullName = (record.firstName + record.lastName).toLowerCase();
-          const fullNameTerm = fullNameExpr.toLowerCase();
-
-          if (fullName.includes(fullNameTerm)) {
-            return true;
-          }
-          return false;
-        });
+        return filterByFullName(fullNameExpr);
       }
 
-      //Both
+      //By both
       return records.filter(record => {
         const fullName = (record.firstName + record.lastName).toLowerCase();
         const email = record.email.toLowerCase();
