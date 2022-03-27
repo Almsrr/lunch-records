@@ -24,11 +24,13 @@ export const RecordItem: FC<RecordItemProps> = ({
   return (
     <tr>
       <td>
-        <SelectionCheckbox
-          type="checkbox"
-          onChange={onSelect.bind(null, record.id)}
-          size={18}
-        />
+        <div className="d-flex justify-content-center">
+          <SelectionCheckbox
+            type="checkbox"
+            onChange={onSelect.bind(null, record.id)}
+            size={18}
+          />
+        </div>
       </td>
       <td>{++index}</td>
       <td>{`${record.firstName} ${record.lastName}`}</td>
@@ -37,12 +39,14 @@ export const RecordItem: FC<RecordItemProps> = ({
       <td>{record.age}</td>
       <td>{record.address}</td>
       <td>
-        <Checkbox
-          id="selection"
-          value={record.foodDelivered}
-          onChange={changeFoodDelivered}
-          size={18}
-        />
+        <div className="d-flex justify-content-center">
+          <Checkbox
+            id="selection"
+            value={record.foodDelivered}
+            onChange={changeFoodDelivered}
+            size={18}
+          />
+        </div>
       </td>
       <td>{record.comment}</td>
     </tr>

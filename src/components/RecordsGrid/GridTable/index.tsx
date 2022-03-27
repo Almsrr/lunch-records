@@ -1,6 +1,6 @@
 import { FC } from "react";
+import styled from "styled-components";
 
-import Table from "react-bootstrap/Table";
 import { Record } from "../../../types/Record";
 import { RecordItem } from "./RecordItem";
 
@@ -16,7 +16,7 @@ export const GridTable: FC<GridTableProps> = ({
   onUpdateRecordFood,
 }) => {
   return (
-    <Table bordered>
+    <RecordsTable>
       <thead>
         <tr>
           <th></th>
@@ -41,6 +41,23 @@ export const GridTable: FC<GridTableProps> = ({
           />
         ))}
       </tbody>
-    </Table>
+    </RecordsTable>
   );
 };
+
+const RecordsTable = styled.table`
+  width: 100%;
+  background-color: #fff;
+  font-size: 14px;
+
+  & th,
+  & td {
+    padding: 0.75rem;
+    border: 1px solid #d0d0d0;
+    vertical-align: baseline;
+  }
+
+  & tr:hover {
+    background-color: rgba(208, 208, 208, 0.5);
+  }
+`;

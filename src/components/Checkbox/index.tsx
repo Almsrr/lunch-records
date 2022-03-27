@@ -25,13 +25,15 @@ export const Checkbox: FC<CheckboxProps> = ({
   };
 
   if (!label) {
-    <Input
-      type="checkbox"
-      id={id}
-      onChange={inputHandler}
-      checked={value}
-      size={size}
-    />;
+    return (
+      <Input
+        type="checkbox"
+        id={id}
+        onChange={inputHandler}
+        checked={value}
+        size={size}
+      />
+    );
   }
 
   return (
