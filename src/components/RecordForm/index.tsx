@@ -144,6 +144,34 @@ export const RecordForm: FC<RecordFormProps> = ({
         onFinish();
       }
     }
+    // if user changed input initials values
+    const firstWasChanged = firstName !== initials?.firstName;
+    const lastWasChanged = lastName !== initials?.lastName;
+    const ageWasChanged = age !== initials?.age;
+    const addressWasChanged = address !== initials?.address;
+    const phoneWasChanged = phoneNumber !== initials?.phoneNumber;
+    const foodDelWasChanged = foodDelivered !== initials?.foodDelivered;
+    const commentWasChanged = comment !== initials?.comment;
+
+    const fieldsChanged =
+      firstWasChanged ||
+      lastWasChanged ||
+      ageWasChanged ||
+      addressWasChanged ||
+      phoneWasChanged ||
+      foodDelWasChanged ||
+      commentWasChanged;
+
+    if (fieldsChanged) {
+      onModal({
+        show: true,
+        type: "warning",
+        message:
+          "Are you sure do you want leave this page? All your changes will be lost",
+      });
+    } else {
+      onFinish();
+    }
   };
 
   return (

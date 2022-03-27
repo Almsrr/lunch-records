@@ -71,6 +71,7 @@ export const EditRecordForm: FC = () => {
           message={modal.message}
           onClose={closeModal}
           onConfirm={goToHome}
+          onSuccess={goToHome}
         />
       )}
     </Fragment>
