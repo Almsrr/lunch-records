@@ -47,5 +47,22 @@ export const useLocalStorage = () => {
     localStorage.setItem("records", JSON.stringify(updatedRecords));
   }, []);
 
-  return { addRecord, updateRecord, getRecord, getRecords, deleteRecords };
+  const updateFoodDelivered = useCallback((id: string, value: boolean) => {
+    const records: Record[] = JSON.parse(localStorage.getItem("records")!);
+
+    const index = records.findIndex(record => record.id === id);
+    records[index].foodDelivered = value;
+
+    const updatedRecords = JSON.stringify(records);
+    localStorage.setItem("records", updatedRecords);
+  }, []);
+
+  return {
+    addRecord,
+    updateRecord,
+    getRecord,
+    getRecords,
+    deleteRecords,
+    updateFoodDelivered,
+  };
 };

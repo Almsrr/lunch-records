@@ -9,7 +9,7 @@ import { GridTable } from "./GridTable";
 export const RecordsGrid: FC = () => {
   const [records, setRecords] = useState<Record[]>([]);
   const [selectedRecordsIds, setSelectedRecordsIds] = useState<string[]>([]);
-  const { getRecords, deleteRecords } = useLocalStorage();
+  const { getRecords, deleteRecords, updateFoodDelivered } = useLocalStorage();
 
   const fetchRecords = useCallback(() => {
     const loadedRecords = getRecords();
@@ -31,8 +31,9 @@ export const RecordsGrid: FC = () => {
     setSelectedRecordsIds(ids => ids.filter(id => id !== selectedRecordId));
   };
 
-  const updateRecordItem = () => {
-    console.log("hi mom");
+  const updateRecordItem = (id: string, foodDelivered: boolean) => {
+    updateFoodDelivered(id, foodDelivered);
+    fetchRecords();
   };
 
   const deleteSelectedRecords = () => {
@@ -49,7 +50,7 @@ export const RecordsGrid: FC = () => {
       <GridTable
         recordsList={records}
         onSelectRecord={selectRecordItem}
-        onUpdateRecord={updateRecordItem}
+        onUpdateRecordFood={updateRecordItem}
       />
     </Container>
   );

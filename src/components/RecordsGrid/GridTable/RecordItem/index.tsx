@@ -8,15 +8,19 @@ interface RecordItemProps {
   record: Record;
   index: number;
   onSelect: (id: string) => void;
-  onUpdate: () => void;
+  onUpdateFood: (id: string, foodDelivered: boolean) => void;
 }
 
 export const RecordItem: FC<RecordItemProps> = ({
   index,
   record,
   onSelect,
-  onUpdate,
+  onUpdateFood,
 }) => {
+  const changeFoodDelivered = (value: boolean) => {
+    onUpdateFood(record.id, value);
+  };
+
   return (
     <tr>
       <td>
@@ -36,7 +40,7 @@ export const RecordItem: FC<RecordItemProps> = ({
         <Checkbox
           id="selection"
           value={record.foodDelivered}
-          onChange={onUpdate}
+          onChange={changeFoodDelivered}
           size={18}
         />
       </td>

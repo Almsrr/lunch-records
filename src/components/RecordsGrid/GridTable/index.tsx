@@ -7,13 +7,13 @@ import { RecordItem } from "./RecordItem";
 interface GridTableProps {
   recordsList: Record[];
   onSelectRecord: (id: string) => void;
-  onUpdateRecord: () => void;
+  onUpdateRecordFood: (id: string, foodDelivered: boolean) => void;
 }
 
 export const GridTable: FC<GridTableProps> = ({
   recordsList,
   onSelectRecord,
-  onUpdateRecord,
+  onUpdateRecordFood,
 }) => {
   return (
     <Table bordered>
@@ -37,7 +37,7 @@ export const GridTable: FC<GridTableProps> = ({
             record={item}
             index={i}
             onSelect={onSelectRecord}
-            onUpdate={onUpdateRecord}
+            onUpdateFood={onUpdateRecordFood}
           />
         ))}
       </tbody>
