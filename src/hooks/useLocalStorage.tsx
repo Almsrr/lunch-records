@@ -4,75 +4,87 @@ import { v4 as uuidv4 } from "uuid";
 import { NewRecord } from "../types/NewRecord";
 import { Record } from "../types/Record";
 
+const { stringify, parse } = JSON;
+
+const retrieveFromStorage = (): Record[] => {
+  return parse(localStorage.getItem("records")!);
+};
+
+const updateStorage = (records: Record[]): void => {
+  localStorage.setItem("records", stringify(records));
+};
+
 export const useLocalStorage = () => {
-  const addRecord = useCallback((record: NewRecord) => {
-    const newRecord = { id: uuidv4(), ...record };
-    const records: Record[] = JSON.parse(localStorage.getItem("records")!);
+  //CREATE
+  const addRecord = useCallback((newRecord: NewRecord) => {
+    const record = { id: uuidv4(), ...newRecord };
+    const records = retrieveFromStorage();
 
     if (records) {
-      const updatedRecords = JSON.stringify([...records, newRecord]);
-      localStorage.setItem("records", updatedRecords);
+      updateStorage([...records, record]);
       return;
     }
-    const newRecords = JSON.stringify(Array(newRecord));
-    localStorage.setItem("records", newRecords);
+    const newRecords = Array(record);
+    updateStorage(newRecords);
   }, []);
 
-  const updateRecord = useCallback((id: string, record: NewRecord) => {
-    const records: Record[] = JSON.parse(localStorage.getItem("records")!);
-
-    const index = records.findIndex(record => record.id === id);
-    records[index] = { id, ...record };
-
-    const updatedRecords = JSON.stringify(records);
-    localStorage.setItem("records", updatedRecords);
+  //READ
+  const getRecords = useCallback(() => {
+    return retrieveFromStorage();
   }, []);
 
   const getRecord = useCallback((id: string) => {
-    const records: Record[] = JSON.parse(localStorage.getItem("records")!);
+    const records = retrieveFromStorage();
     return records.find(record => record.id === id);
   }, []);
 
-  const getRecords = useCallback(() => {
-    return JSON.parse(localStorage.getItem("records")!);
-  }, []);
+  //UPDATE
+  const updateRecord = useCallback((id: string, newRecord: NewRecord) => {
+    const records = retrieveFromStorage();
 
-  const deleteRecords = useCallback((ids: string[]) => {
-    const records: Record[] = JSON.parse(localStorage.getItem("records")!);
-    ids.forEach(id => {
-      const recordIndex = records.findIndex(record => record.id === id);
-      records.splice(recordIndex, 1);
-    });
-    const updatedRecords = [...records];
-    localStorage.setItem("records", JSON.stringify(updatedRecords));
+    const index = records.findIndex(record => record.id === id);
+    records[index] = { id, ...newRecord };
+
+    updateStorage(records);
   }, []);
 
   const updateFoodDelivered = useCallback((id: string, value: boolean) => {
-    const records: Record[] = JSON.parse(localStorage.getItem("records")!);
+    const records = retrieveFromStorage();
 
     const index = records.findIndex(record => record.id === id);
     records[index].foodDelivered = value;
 
-    const updatedRecords = JSON.stringify(records);
-    localStorage.setItem("records", updatedRecords);
+    updateStorage(records);
   }, []);
 
-  const filterBy = (field: string, value: string) => {
-    const records: Record[] = JSON.parse(localStorage.getItem("records")!);
+  // DELETE
+  const deleteRecords = useCallback((ids: string[]) => {
+    const records = retrieveFromStorage();
 
-    let validProp = false;
-    records.forEach(record => {
-      validProp = Object.keys(record).includes(field);
+    ids.forEach(id => {
+      const index = records.findIndex(record => record.id === id);
+      records.splice(index, 1);
+    });
+    updateStorage(records);
+  }, []);
+
+  // FILTER
+  const filterBy = (field: string, value: string) => {
+    const records = retrieveFromStorage();
+
+    const validField = records.every(record => {
+      return Object.keys(record).includes(field);
     });
 
-    if (validProp) {
+    if (validField) {
       return records.filter(record => (record as any)[field].includes(value));
     }
     return records;
   };
 
   const filterByFullName = (value: string) => {
-    const records: Record[] = JSON.parse(localStorage.getItem("records")!);
+    const records = retrieveFromStorage();
+
     return records.filter(record => {
       const fullName = (record.firstName + record.lastName).toLowerCase();
       const term = value.toLowerCase();
@@ -84,7 +96,8 @@ export const useLocalStorage = () => {
   };
 
   const filterByEmail = (value: string) => {
-    const records: Record[] = JSON.parse(localStorage.getItem("records")!);
+    const records = retrieveFromStorage();
+
     return records.filter(record => {
       const email = record.email.toLowerCase();
       const term = value.toLowerCase();
@@ -102,6 +115,7 @@ export const useLocalStorage = () => {
     getRecords,
     deleteRecords,
     updateFoodDelivered,
+    filterBy,
     filterByFullName,
     filterByEmail,
   };
