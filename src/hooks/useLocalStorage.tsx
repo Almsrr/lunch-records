@@ -32,8 +32,17 @@ export const useLocalStorage = () => {
     const records: Record[] = JSON.parse(localStorage.getItem("records")!);
     return records.find(record => record.id === id);
   }, []);
-  // const getRecords = () => {};
-  // const deleteRecord = () => {};
 
-  return { addRecord, updateRecord, getRecord };
+  const getRecords = useCallback(() => {
+    return JSON.parse(localStorage.getItem("records")!);
+  }, []);
+
+  const deleteRecord = useCallback((id: string) => {
+    const records: Record[] = JSON.parse(localStorage.getItem("records")!);
+    const updatedRecords = records.filter(record => record.id !== id);
+
+    localStorage.setItem("records", JSON.stringify(updatedRecords));
+  }, []);
+
+  return { addRecord, updateRecord, getRecord, getRecords, deleteRecord };
 };
