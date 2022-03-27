@@ -37,12 +37,15 @@ export const useLocalStorage = () => {
     return JSON.parse(localStorage.getItem("records")!);
   }, []);
 
-  const deleteRecord = useCallback((id: string) => {
+  const deleteRecords = useCallback((ids: string[]) => {
     const records: Record[] = JSON.parse(localStorage.getItem("records")!);
-    const updatedRecords = records.filter(record => record.id !== id);
-
+    ids.forEach(id => {
+      const recordIndex = records.findIndex(record => record.id === id);
+      records.splice(recordIndex, 1);
+    });
+    const updatedRecords = [...records];
     localStorage.setItem("records", JSON.stringify(updatedRecords));
   }, []);
 
-  return { addRecord, updateRecord, getRecord, getRecords, deleteRecord };
+  return { addRecord, updateRecord, getRecord, getRecords, deleteRecords };
 };

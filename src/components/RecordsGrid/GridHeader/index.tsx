@@ -2,28 +2,21 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { Record } from "../../../types/Record";
-
 interface GridHeaderProps {
-  selectedRecords: Record[];
+  recordsIds: string[];
   onDelete: () => void;
 }
 
-export const GridHeader: FC<GridHeaderProps> = ({
-  selectedRecords,
-  onDelete,
-}) => {
+export const GridHeader: FC<GridHeaderProps> = ({ recordsIds, onDelete }) => {
   const navigate = useNavigate();
 
   const editHandler = () => {
-    const id = selectedRecords[0].id;
+    const id = recordsIds[0];
     navigate(`edit?id=${id}`);
   };
 
   const deleteHandler = () => {
-    const confirmed = window.confirm(
-      "Are you sure do you want to delete this record?"
-    );
+    const confirmed = window.confirm("Are you sure do you want to do this?");
     if (confirmed) {
       onDelete();
     }
@@ -33,7 +26,7 @@ export const GridHeader: FC<GridHeaderProps> = ({
   };
 
   return (
-    <Header>
+    <Container>
       <h1 className="m-0">Records</h1>
       {/* <Actions>
         {selectedRecords.length === 1 && (
@@ -54,7 +47,7 @@ export const GridHeader: FC<GridHeaderProps> = ({
         <Button
           type="button"
           onClick={editHandler}
-          disabled={!(selectedRecords.length === 1)}
+          disabled={recordsIds.length !== 1}
         >
           Edit <i className="fa-solid fa-pen"></i>
         </Button>
@@ -62,7 +55,7 @@ export const GridHeader: FC<GridHeaderProps> = ({
         <Button
           type="button"
           onClick={deleteHandler}
-          disabled={!(selectedRecords.length > 0)}
+          disabled={recordsIds.length < 0}
         >
           Delete <i className="fa-solid fa-trash-can"></i>
         </Button>
@@ -70,11 +63,11 @@ export const GridHeader: FC<GridHeaderProps> = ({
           Add <i className="fa-solid fa-plus"></i>
         </Button>
       </Actions>
-    </Header>
+    </Container>
   );
 };
 
-const Header = styled.header`
+const Container = styled.header`
   display: flex;
   justify-content: space-between;
   background-color: #003366;

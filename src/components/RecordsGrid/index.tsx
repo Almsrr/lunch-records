@@ -1,116 +1,56 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import { AgGridReact } from "ag-grid-react";
-import {
-  ColDef,
-  RowSelectedEvent,
-  GridReadyEvent,
-  GridApi,
-} from "ag-grid-community";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import { GridHeader } from "./GridHeader";
 import { Record } from "../../types/Record";
+import { GridHeader } from "./GridHeader";
+import { GridTable } from "./GridTable";
 
 export const RecordsGrid: FC = () => {
-  const [rowsData, setRowsData] = useState<Record[]>([]);
-  const [selectedRecords, setSelectedRecords] = useState<Record[]>([]);
-  const [gridApi, setGridApi] = useState<GridApi>();
-  const [colDef] = useState<ColDef[]>([
-    { checkboxSelection: true },
-    { field: "id", headerName: "ID", hide: true },
-    { field: "firstName", headerName: "First Name" },
-    { field: "lastName", headerName: "Last Name" },
-    { field: "phoneNumber", headerName: "Phone Number" },
-    { field: "email", headerName: "Email" },
-    { field: "age", headerName: "Age" },
-    { field: "address", headerName: "Address" },
-    {
-      field: "foodDelivered",
-      headerName: "Food Delivered",
-      valueGetter: param => {
-        if (param.getValue("foodDelivered")) {
-          return "Yes";
-        }
-        return "No";
-      },
-    },
-    { field: "comment", headerName: "Comment" },
-  ]);
+  const [records, setRecords] = useState<Record[]>([]);
+  const [selectedRecordsIds, setSelectedRecordsIds] = useState<string[]>([]);
+  const { getRecords, deleteRecords } = useLocalStorage();
+
+  const fetchRecords = useCallback(() => {
+    const loadedRecords = getRecords();
+    if (loadedRecords) {
+      setRecords(loadedRecords);
+    }
+  }, [getRecords]);
 
   useEffect(() => {
-    setRowsData([
-      {
-        id: "0",
-        firstName: "Alam",
-        lastName: "Sierra",
-        phoneNumber: "1112223333",
-        email: "alam@domain.com",
-        age: 34,
-        address: "Sabana Perdida",
-        foodDelivered: false,
-        comment: "some comment",
-      },
-      {
-        id: "1",
-        firstName: "Alam",
-        lastName: "Sierra",
-        phoneNumber: "1112223333",
-        email: "alam@domain.com",
-        age: 34,
-        address: "Sabana Perdida",
-        foodDelivered: false,
-        comment: "some comment",
-      },
-      {
-        id: "3",
-        firstName: "Alam",
-        lastName: "Sierra",
-        phoneNumber: "1112223333",
-        email: "alam@domain.com",
-        age: 34,
-        address: "Sabana Perdida",
-        foodDelivered: false,
-        comment: "some comment",
-      },
-    ]);
-  }, []);
+    fetchRecords();
+  }, [fetchRecords]);
 
-  const updateSelectedRecords = (event: RowSelectedEvent) => {
-    const selectedRecord = event.node.data;
-    const exists = selectedRecords.some(
-      record => record.id === selectedRecord.id
-    );
-
+  const selectRecordItem = (selectedRecordId: string) => {
+    const exists = selectedRecordsIds.some(id => id === selectedRecordId);
     if (!exists) {
-      setSelectedRecords(records => [...records, selectedRecord]);
+      setSelectedRecordsIds(ids => [...ids, selectedRecordId]);
       return;
     }
-    setSelectedRecords(records =>
-      records.filter(record => record.id !== selectedRecord.id)
-    );
+    setSelectedRecordsIds(ids => ids.filter(id => id !== selectedRecordId));
   };
 
-  const gridReadyHandler = (event: GridReadyEvent) => {
-    setGridApi(event.api);
+  const updateRecordItem = () => {
+    console.log("hi mom");
   };
 
-  const deleteRecords = () => {
-    gridApi!.applyTransaction({ remove: selectedRecords });
+  const deleteSelectedRecords = () => {
+    deleteRecords(selectedRecordsIds);
+    fetchRecords();
   };
 
   return (
     <Container>
-      <GridHeader selectedRecords={selectedRecords} onDelete={deleteRecords} />
-      {/* <GridBody className="ag-theme-alpine">
-        <AgGridReact
-          rowData={rowsData}
-          columnDefs={colDef}
-          onRowSelected={updateSelectedRecords}
-          onGridReady={gridReadyHandler}
-          rowSelection="multiple"
-        />
-      </GridBody> */}
+      <GridHeader
+        recordsIds={selectedRecordsIds}
+        onDelete={deleteSelectedRecords}
+      />
+      <GridTable
+        recordsList={records}
+        onSelectRecord={selectRecordItem}
+        onUpdateRecord={updateRecordItem}
+      />
     </Container>
   );
 };
@@ -118,9 +58,4 @@ export const RecordsGrid: FC = () => {
 const Container = styled.div`
   width: 85%;
   overflow-x: scroll;
-`;
-
-const GridBody = styled.div`
-  width: 100%;
-  height: 500px;
 `;
