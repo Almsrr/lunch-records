@@ -57,6 +57,44 @@ export const useLocalStorage = () => {
     localStorage.setItem("records", updatedRecords);
   }, []);
 
+  const filterBy = (field: string, value: string) => {
+    const records: Record[] = JSON.parse(localStorage.getItem("records")!);
+
+    let validProp = false;
+    records.forEach(record => {
+      validProp = Object.keys(record).includes(field);
+    });
+
+    if (validProp) {
+      return records.filter(record => (record as any)[field].includes(value));
+    }
+    return records;
+  };
+
+  const filterByFullName = (value: string) => {
+    const records: Record[] = JSON.parse(localStorage.getItem("records")!);
+    return records.filter(record => {
+      const fullName = (record.firstName + record.lastName).toLowerCase();
+      const term = value.toLowerCase();
+      if (fullName.includes(term)) {
+        return true;
+      }
+      return false;
+    });
+  };
+
+  const filterByEmail = (value: string) => {
+    const records: Record[] = JSON.parse(localStorage.getItem("records")!);
+    return records.filter(record => {
+      const email = record.email.toLowerCase();
+      const term = value.toLowerCase();
+      if (email.includes(term)) {
+        return true;
+      }
+      return false;
+    });
+  };
+
   return {
     addRecord,
     updateRecord,
@@ -64,5 +102,7 @@ export const useLocalStorage = () => {
     getRecords,
     deleteRecords,
     updateFoodDelivered,
+    filterByFullName,
+    filterByEmail,
   };
 };

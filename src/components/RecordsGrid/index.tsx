@@ -5,11 +5,18 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { Record } from "../../types/Record";
 import { GridHeader } from "./GridHeader";
 import { GridTable } from "./GridTable";
+import { GridFilters } from "./GridFilters";
 
 export const RecordsGrid: FC = () => {
   const [records, setRecords] = useState<Record[]>([]);
   const [selectedRecordsIds, setSelectedRecordsIds] = useState<string[]>([]);
-  const { getRecords, deleteRecords, updateFoodDelivered } = useLocalStorage();
+  const {
+    getRecords,
+    deleteRecords,
+    updateFoodDelivered,
+    filterByFullName,
+    filterByEmail,
+  } = useLocalStorage();
 
   const fetchRecords = useCallback(() => {
     const loadedRecords = getRecords();
@@ -41,8 +48,22 @@ export const RecordsGrid: FC = () => {
     fetchRecords();
   };
 
+  const filterFullName = (value: string) => {
+    const filteredRecords = filterByFullName(value);
+    setRecords(filteredRecords);
+  };
+
+  const filterEmail = (value: string) => {
+    const filteredRecords = filterByEmail(value);
+    setRecords(filteredRecords);
+  };
+
   return (
     <Container>
+      <GridFilters
+        onFilterFullName={filterFullName}
+        onFilterEmail={filterEmail}
+      />
       <GridHeader
         recordsIds={selectedRecordsIds}
         onDelete={deleteSelectedRecords}
