@@ -3,8 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { RecordForm } from "../RecordForm";
 import { NewRecord } from "../../types/NewRecord";
-import { Modal } from "react-bootstrap";
-import { ModalConfig } from "../../types/ModalConfig";
+import { Modal } from "../Modal";
+import { ModalOptions } from "../../types/ModalOptions";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 export const EditRecordForm: FC = () => {
@@ -12,11 +12,10 @@ export const EditRecordForm: FC = () => {
   const [searchParams] = useSearchParams();
   const { getRecord, updateRecord } = useLocalStorage();
   const [initials, setInitials] = useState<NewRecord>();
-  const [modal, setModal] = useState<ModalConfig>({
+  const [modal, setModal] = useState<ModalOptions>({
     show: false,
-    error: false,
-    loading: false,
-    message: <p></p>,
+    type: "",
+    message: "",
   });
 
   useEffect(() => {
@@ -28,25 +27,31 @@ export const EditRecordForm: FC = () => {
   }, [searchParams, getRecord]);
 
   const modifyRecord = (record: NewRecord) => {
+    modalHandler({ show: true, type: "loading", message: "Loading..." });
+
     const recordId = searchParams.get("id");
     updateRecord(recordId!, record);
-    goToHome();
+
+    modalHandler({
+      show: true,
+      type: "success",
+      message: "Record updated successfully!",
+    });
   };
 
   const goToHome = () => {
     navigate("/");
   };
 
-  const modalHandler = (config: ModalConfig) => {
-    setModal(config);
+  const modalHandler = (opts: ModalOptions) => {
+    setModal(opts);
   };
 
   const closeModal = () => {
     modalHandler({
       show: false,
-      error: false,
-      message: <p></p>,
-      loading: false,
+      type: "",
+      message: "",
     });
   };
 
@@ -62,10 +67,10 @@ export const EditRecordForm: FC = () => {
       />
       {modal.show && (
         <Modal
-          error={modal.error}
+          type={modal.type}
           message={modal.message}
           onClose={closeModal}
-          loading={modal.loading}
+          onConfirm={goToHome}
         />
       )}
     </Fragment>

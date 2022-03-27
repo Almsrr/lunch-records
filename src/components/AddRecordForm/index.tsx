@@ -4,38 +4,36 @@ import { useNavigate } from "react-router-dom";
 import { RecordForm } from "../RecordForm";
 import { NewRecord } from "../../types/NewRecord";
 import { Modal } from "../Modal";
-import { ModalConfig } from "../../types/ModalConfig";
+import { ModalOptions } from "../../types/ModalOptions";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 export const AddRecordForm: FC = () => {
   const navigate = useNavigate();
   const { addRecord } = useLocalStorage();
-  const [modal, setModal] = useState<ModalConfig>({
+  const [modal, setModal] = useState<ModalOptions>({
     show: false,
-    error: false,
-    message: <p></p>,
-    loading: false,
+    type: "",
+    message: "",
   });
 
-  const sendNewRecord = (newRecord: NewRecord) => {
+  const addNewRecord = (newRecord: NewRecord) => {
     modalHandler({
       show: true,
-      error: false,
-      loading: true,
-      message: <p className="m-0">Loading...</p>,
+      type: "loading",
+      message: "Loading...",
     });
 
     addRecord(newRecord);
 
     modalHandler({
       show: true,
-      error: false,
-      message: <p className="m-0">Record added successfully</p>,
+      type: "success",
+      message: "Record added successfully",
     });
   };
 
-  const modalHandler = (config: ModalConfig) => {
-    setModal(config);
+  const modalHandler = (opts: ModalOptions) => {
+    setModal(opts);
   };
 
   const goToHome = () => {
@@ -45,27 +43,21 @@ export const AddRecordForm: FC = () => {
   const closeModal = () => {
     modalHandler({
       show: false,
-      error: false,
-      message: <p></p>,
-      loading: false,
+      message: "",
+      type: "",
     });
   };
 
   return (
     <Fragment>
       <RecordForm
-        onSubmit={sendNewRecord}
+        onSubmit={addNewRecord}
         onFinish={goToHome}
         title={"New Record"}
         onModal={modalHandler}
       />
       {modal.show && (
-        <Modal
-          error={modal.error}
-          message={modal.message}
-          onClose={closeModal}
-          loading={modal.loading}
-        />
+        <Modal type={modal.type} message={modal.message} onClose={closeModal} />
       )}
     </Fragment>
   );

@@ -9,7 +9,7 @@ import { Input } from "../Input";
 import { Textarea } from "../Textarea";
 import { Checkbox } from "../Checkbox";
 import { useInput } from "../../hooks/useInput";
-import { ModalConfig } from "../../types/ModalConfig";
+import { ModalOptions } from "../../types/ModalOptions";
 
 interface RecordFormProps {
   edit?: boolean;
@@ -17,7 +17,7 @@ interface RecordFormProps {
   initials?: NewRecord;
   onSubmit(record: NewRecord): void;
   onFinish: () => void;
-  onModal: (config: ModalConfig) => void;
+  onModal: (opts: ModalOptions) => void;
 }
 
 const isEmpty = (str: string) => str.trim() === "";
@@ -92,8 +92,11 @@ export const RecordForm: FC<RecordFormProps> = ({
     const emptyRequiredFields = !firstName || !lastName || !age || !email;
 
     if (emptyRequiredFields) {
-      const message = <p>Required fields are empty</p>;
-      onModal({ show: true, error: true, loading: false, message });
+      onModal({
+        show: true,
+        type: "error",
+        message: "Required fields are empty",
+      });
 
       blurFirstName();
       blurLastName();

@@ -1,8 +1,7 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import styled from "styled-components";
 import { AgGridReact } from "ag-grid-react";
 import {
-  GridOptions,
   ColDef,
   RowSelectedEvent,
   GridReadyEvent,
@@ -38,27 +37,8 @@ export const RecordsGrid: FC = () => {
     },
     { field: "comment", headerName: "Comment" },
   ]);
-  const gridOptions: GridOptions = {
-    rowSelection: "multiple",
-  };
 
-  const updateSelectedRecords = (event: RowSelectedEvent) => {
-    const selectedRecord = event.node.data;
-    const exists = selectedRecords.some(
-      record => record.id === selectedRecord.id
-    );
-
-    if (!exists) {
-      setSelectedRecords(records => [...records, selectedRecord]);
-      return;
-    }
-    setSelectedRecords(records =>
-      records.filter(record => record.id !== selectedRecord.id)
-    );
-  };
-
-  const gridReadyHandler = (event: GridReadyEvent) => {
-    setGridApi(event.api);
+  useEffect(() => {
     setRowsData([
       {
         id: "0",
@@ -94,6 +74,25 @@ export const RecordsGrid: FC = () => {
         comment: "some comment",
       },
     ]);
+  }, []);
+
+  const updateSelectedRecords = (event: RowSelectedEvent) => {
+    const selectedRecord = event.node.data;
+    const exists = selectedRecords.some(
+      record => record.id === selectedRecord.id
+    );
+
+    if (!exists) {
+      setSelectedRecords(records => [...records, selectedRecord]);
+      return;
+    }
+    setSelectedRecords(records =>
+      records.filter(record => record.id !== selectedRecord.id)
+    );
+  };
+
+  const gridReadyHandler = (event: GridReadyEvent) => {
+    setGridApi(event.api);
   };
 
   const deleteRecords = () => {
@@ -103,15 +102,15 @@ export const RecordsGrid: FC = () => {
   return (
     <Container>
       <GridHeader selectedRecords={selectedRecords} onDelete={deleteRecords} />
-      <GridBody className="ag-theme-alpine">
+      {/* <GridBody className="ag-theme-alpine">
         <AgGridReact
-          gridOptions={gridOptions}
           rowData={rowsData}
           columnDefs={colDef}
           onRowSelected={updateSelectedRecords}
           onGridReady={gridReadyHandler}
+          rowSelection="multiple"
         />
-      </GridBody>
+      </GridBody> */}
     </Container>
   );
 };

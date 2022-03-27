@@ -1,61 +1,79 @@
-import { FC, Fragment, ReactElement } from "react";
+import { FC, Fragment } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 
 import { Spinner } from "../Spinner";
 
 interface ModalProps {
-  loading?: boolean;
-  error?: boolean;
-  message: ReactElement;
+  type: string;
+  message: string;
   onClose: () => void;
+  onConfirm?: () => void;
 }
 
-export const Modal: FC<ModalProps> = ({ message, error, onClose, loading }) => {
+export const Modal: FC<ModalProps> = ({
+  type,
+  message,
+  onClose,
+  onConfirm,
+}) => {
   const root = document.getElementById("modal-root")!;
 
-  if (loading) {
-    const modal = (
-      <Fragment>
-        <Blur onClick={onClose}></Blur>
-        <SpinnerCont>
-          <Spinner />
-          {message}
-        </SpinnerCont>
-      </Fragment>
-    );
-    return createPortal(modal, root);
+  switch (type) {
+    case "loading":
+      const loadingModal = (
+        <Fragment>
+          <Blur onClick={onClose}></Blur>
+          <SpinnerCont>
+            <Spinner />
+            {message}
+          </SpinnerCont>
+        </Fragment>
+      );
+      return createPortal(loadingModal, root);
+    case "warning":
+      const warningModal = (
+        <Fragment>
+          <Blur onClick={onClose}></Blur>
+          <Container>
+            <Img src="/images/warning.png" alt="warning" />
+            {message}
+            <Button type="button" onClick={onClose}>
+              Ok
+            </Button>
+          </Container>
+        </Fragment>
+      );
+      return createPortal(warningModal, root);
+    case "error":
+      const errorModal = (
+        <Fragment>
+          <Blur onClick={onClose}></Blur>
+          <Container>
+            <Img src="/images/error.webp" alt="error" />
+            {message}
+            <Button type="button" onClick={onClose}>
+              Ok
+            </Button>
+          </Container>
+        </Fragment>
+      );
+      return createPortal(errorModal, root);
+    default:
+      const modal = (
+        <Fragment>
+          <Blur onClick={onClose}></Blur>
+          <Container>
+            <Img src="/images/success.png" alt="success" />
+            {message}
+            <Button type="button" onClick={onConfirm || onClose}>
+              Ok
+            </Button>
+          </Container>
+        </Fragment>
+      );
+      return createPortal(modal, root);
   }
-
-  if (error) {
-    const modal = (
-      <Fragment>
-        <Blur onClick={onClose}></Blur>
-        <Container>
-          <Img src="/images/error.webp" alt="success" />
-          {message}
-          <Button type="button" onClick={onClose}>
-            Ok
-          </Button>
-        </Container>
-      </Fragment>
-    );
-    return createPortal(modal, root);
-  }
-
-  const modal = (
-    <Fragment>
-      <Blur onClick={onClose}></Blur>
-      <Container>
-        <Img src="/images/success.png" alt="success" />
-        {message}
-        <Button type="button" onClick={onClose}>
-          Ok
-        </Button>
-      </Container>
-    </Fragment>
-  );
-  return createPortal(modal, root);
 };
 
 const Blur = styled.div`
