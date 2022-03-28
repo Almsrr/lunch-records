@@ -1,46 +1,92 @@
-# Getting Started with Create React App
+# Lunch Records
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Web application whose purpose is to manage the information of the residents who will receive a free lunch in a restaurant.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Lunch records table
+- Filter by name and email
+- New records form
+- Save data locally
 
-### `yarn start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**React:**
+Component based library used to make this SPA.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+**React Router:**
+Render components based on routes.
 
-### `yarn test`
+**Typescript:** Extends Javascript with a type system.
+Help me to write less error prone code.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Bootstrap:** For styles.
 
-### `yarn build`
+**React Bootstrap:**
+Extract pre-built component with bootstrap classes.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Styled components:**
+Create styled HTML elements and use them as components.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Run Locally
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Clone the project
 
-### `yarn eject`
+```bash
+  git clone https://github.com/Almsrr/lunch-records.git
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Go to the project directory
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+  cd lunch-records
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Install dependencies
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```bash
+  yarn install
+```
 
-## Learn More
+Start the server
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+  yarn start
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Screenshots
+
+![grid](./public/screenshots/grid.png)
+
+Home page with a grid containing all the information (records) collected from residents.
+
+At the top end you can filter these records by name (first name/last name) and email.
+
+In the grid header (blue) there are two options that will allow you make interesting things:
+
+**Edit:**
+This option will be available if only one record is selected, and when you click on it, it sends you a complete form with the information of the selected record.
+
+**Delete:**
+Delete option will always be available. You can delete more than one record at the same time.
+
+**Add:**
+Add option will always be available as well. It sends you a empty form waiting for be validated and completed.
+
+Last but not least you can update the Food Delivered field of a record just by checking or unchecking in the "Food Delivered" column.
+
+![add-form](./public/screenshots/add-form.png)
+
+A form to add records.
+
+![edit-form](./public/screenshots/edit-form.png)
+
+A filled form to edit specific record.
+
+### Modals
+
+During the use of the application some types of modals are triggered. These are just two of them. I recommend you use the app.
+
+![success-modal](./public/screenshots/success-modal.png)
+
+![error-modal](./public/screenshots/error-modal.png)
